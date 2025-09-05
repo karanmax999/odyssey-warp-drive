@@ -26,11 +26,13 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					foreground: 'hsl(var(--secondary-foreground))',
+					glow: 'hsl(var(--secondary-glow))'
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
@@ -42,7 +44,8 @@ export default {
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					foreground: 'hsl(var(--accent-foreground))',
+					glow: 'hsl(var(--accent-glow))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -51,16 +54,41 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				}
+			},
+			backgroundImage: {
+				'gradient-cosmic': 'var(--gradient-cosmic)',
+				'gradient-nebula': 'var(--gradient-nebula)',
+				'gradient-aurora': 'var(--gradient-aurora)',
+				'gradient-stellar': 'var(--gradient-stellar)'
+			},
+			animation: {
+				'sparkle': 'sparkle 20s linear infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'glow': 'glow 2s ease-in-out infinite alternate',
+				'slide-up': 'slide-up 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+				'fade-in': 'fade-in 1s ease-out'
+			},
+			keyframes: {
+				sparkle: {
+					'0%': { transform: 'translateY(0px) rotate(0deg)' },
+					'100%': { transform: 'translateY(-300px) rotate(360deg)' }
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				float: {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-20px)' }
+				},
+				glow: {
+					'from': { boxShadow: '0 0 20px hsl(var(--primary-glow) / 0.3)' },
+					'to': { boxShadow: '0 0 40px hsl(var(--primary-glow) / 0.6)' }
+				},
+				'slide-up': {
+					'0%': { opacity: '0', transform: 'translateY(100px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
 				}
 			},
 			borderRadius: {
