@@ -1,11 +1,20 @@
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useInView } from "framer-motion"; 
+import { useRef, useEffect } from "react";
 import { Code, Users, Trophy, Zap } from "lucide-react";
+import { GSAPAnimations } from "@/lib/gsapAnimations";
 
 const AboutSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      GSAPAnimations.createSectionReveal(".about-section");
+      GSAPAnimations.create3DCardEffect(".feature-card");
+      GSAPAnimations.createMagneticButtons(".feature-card");
+    }
+  }, [isInView]);
 
   const features = [
     {
@@ -31,14 +40,9 @@ const AboutSection = () => {
   ];
 
   return (
-    <section ref={ref} className="py-24 relative">
+    <section ref={ref} className="about-section py-24 relative">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
+        <div className="reveal-element text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 text-cosmic-glow">
             About Odyssey
           </h2>
@@ -47,16 +51,13 @@ const AboutSection = () => {
             Bring your ideas to life, collaborate with brilliant minds, and compete for incredible prizes 
             in our space-themed coding adventure.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              className="card-cosmic group hover:scale-105 transition-transform duration-300"
+              className="feature-card card-cosmic group hover:scale-105 transition-transform duration-300 reveal-element transform-gpu"
             >
               <div className="flex flex-col items-center text-center">
                 <div className="mb-6 p-4 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors">
@@ -69,7 +70,7 @@ const AboutSection = () => {
                   {feature.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

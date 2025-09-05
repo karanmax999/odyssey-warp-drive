@@ -2,16 +2,52 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import heroSpace from "@/assets/hero-space.jpg";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { GSAPAnimations } from "@/lib/gsapAnimations";
 
 const HeroSection = () => {
+  const heroRef = useRef<HTMLElement>(null);
+  const particlesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Initialize GSAP animations
+    const heroTl = GSAPAnimations.createHeroAnimations();
+    GSAPAnimations.createParallaxBackground();
+    GSAPAnimations.createMagneticButtons(".magnetic-btn");
+    GSAPAnimations.createFloatingParticles(".floating-particle");
+    
+    // Create floating particles
+    if (particlesRef.current) {
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement("div");
+        particle.className = "floating-particle star absolute w-1 h-1 bg-primary-glow rounded-full";
+        particle.style.left = Math.random() * 100 + "%";
+        particle.style.top = Math.random() * 100 + "%";
+        particle.style.animationDelay = Math.random() * 3 + "s";
+        particlesRef.current.appendChild(particle);
+      }
+    }
+
+    // Text scramble effect for title
+    setTimeout(() => {
+      GSAPAnimations.createTextScramble(".hero-title", "ODYSSEY");
+    }, 1000);
+
+    return () => {
+      heroTl.kill();
+    };
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Starfield Background */}
+    <section ref={heroRef} className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Enhanced Starfield Background */}
+      <div ref={particlesRef} className="absolute inset-0 z-0"></div>
       <div className="starfield"></div>
       
-      {/* Hero Background */}
+      {/* Hero Background with Parallax */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="parallax-bg absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
         style={{ 
           backgroundImage: `url(${heroSpace})`,
           filter: 'brightness(0.4)'
@@ -28,55 +64,30 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <motion.h1 
-            className="text-6xl md:text-8xl font-bold mb-6 text-cosmic-glow"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
+          <h1 className="hero-title text-6xl md:text-8xl font-bold mb-6 text-cosmic-glow transform-gpu">
             ODYSSEY
-          </motion.h1>
+          </h1>
           
-          <motion.h2 
-            className="text-2xl md:text-4xl font-light mb-8 text-nebula-glow"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-          >
+          <h2 className="hero-subtitle text-2xl md:text-4xl font-light mb-8 text-nebula-glow">
             Hackathon 2024
-          </motion.h2>
+          </h2>
           
-          <motion.p 
-            className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-          >
+          <p className="hero-description text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
             Embark on a 48-hour journey to build the future. Join developers, designers, and innovators 
             for an epic coding adventure that will push the boundaries of technology.
-          </motion.p>
+          </p>
           
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-          >
-            <Button className="btn-cosmic group">
+          <div className="hero-buttons flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+            <Button className="magnetic-btn btn-cosmic group transform-gpu">
               Register Now
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="outline" className="border-border/50 bg-card/20 backdrop-blur-sm">
+            <Button variant="outline" className="magnetic-btn border-border/50 bg-card/20 backdrop-blur-sm transform-gpu">
               Learn More
             </Button>
-          </motion.div>
+          </div>
           
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-8 justify-center items-center text-sm text-muted-foreground"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-          >
+          <div className="hero-details flex flex-col sm:flex-row gap-8 justify-center items-center text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <span>March 15-17, 2024</span>
@@ -85,7 +96,7 @@ const HeroSection = () => {
               <MapPin className="w-4 h-4" />
               <span>TechHub Innovation Center</span>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       </div>
       

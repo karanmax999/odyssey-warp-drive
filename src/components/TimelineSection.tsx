@@ -1,11 +1,26 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Clock, Calendar, CheckCircle } from "lucide-react";
+import { GSAPAnimations } from "@/lib/gsapAnimations";
 
 const TimelineSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      GSAPAnimations.createSectionReveal(".timeline-section");
+      GSAPAnimations.create3DCardEffect(".timeline-card");
+      
+      // Enhanced timeline animations
+      const timelineItems = document.querySelectorAll(".timeline-item");
+      timelineItems.forEach((item, index) => {
+        const delay = index * 0.2;
+        GSAPAnimations.createStaggerTextReveal(`.timeline-item-${index} .timeline-title`);
+      });
+    }
+  }, [isInView]);
 
   const timelineEvents = [
     {
@@ -65,21 +80,16 @@ const TimelineSection = () => {
   ];
 
   return (
-    <section ref={ref} className="py-24 relative">
+    <section ref={ref} className="timeline-section py-24 relative">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
+        <div className="reveal-element text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 text-nebula-glow">
             Mission Timeline
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Your 48-hour journey mapped out from launch to landing
           </p>
-        </motion.div>
+        </div>
 
         <div className="relative">
           {/* Timeline Line */}
@@ -87,12 +97,9 @@ const TimelineSection = () => {
 
           <div className="space-y-12">
             {timelineEvents.map((event, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className={`relative flex items-center ${
+                className={`timeline-item timeline-item-${index} relative flex items-center reveal-element ${
                   index % 2 === 0 ? 'md:flex-row-reverse' : ''
                 }`}
               >
@@ -103,7 +110,7 @@ const TimelineSection = () => {
                 <div className={`flex-1 ml-12 md:ml-0 ${
                   index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'
                 }`}>
-                  <div className="card-cosmic hover:scale-105 transition-transform duration-300">
+                  <div className="timeline-card card-cosmic hover:scale-105 transition-transform duration-300 transform-gpu">
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0">
                         <div className="p-2 rounded-lg bg-primary/20">
@@ -112,7 +119,7 @@ const TimelineSection = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                          <h3 className="text-lg font-bold text-foreground">
+                          <h3 className="timeline-title text-lg font-bold text-foreground">
                             {event.title}
                           </h3>
                           <div className="flex items-center gap-2 text-sm text-primary-glow">
@@ -129,7 +136,7 @@ const TimelineSection = () => {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

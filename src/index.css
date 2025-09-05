@@ -98,36 +98,97 @@
 }
 
 @layer components {
-  /* Cosmic button variants */
+  /* Enhanced Cosmic button variants with 3D effects */
   .btn-cosmic {
-    @apply bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold px-8 py-4 rounded-full;
+    @apply bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold px-8 py-4 rounded-full relative overflow-hidden;
     @apply shadow-[0_0_30px_hsl(var(--primary-glow)_/_0.4)] transition-all duration-300;
     @apply hover:shadow-[0_0_50px_hsl(var(--primary-glow)_/_0.6)] hover:scale-105;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .btn-cosmic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary-glow) / 0.4), transparent);
+    transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-cosmic:hover::before {
+    left: 100%;
+  }
+
+  .btn-cosmic::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, hsl(var(--primary-glow) / 0.2) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .btn-cosmic:hover::after {
+    opacity: 1;
   }
 
   .btn-nebula {
-    @apply bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground font-semibold px-8 py-4 rounded-full;
+    @apply bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground font-semibold px-8 py-4 rounded-full relative overflow-hidden;
     @apply shadow-[0_0_30px_hsl(var(--secondary-glow)_/_0.4)] transition-all duration-300;
     @apply hover:shadow-[0_0_50px_hsl(var(--secondary-glow)_/_0.6)] hover:scale-105;
+    transform-style: preserve-3d;
   }
 
   .btn-aurora {
-    @apply bg-gradient-to-r from-accent to-accent-glow text-accent-foreground font-semibold px-8 py-4 rounded-full;
+    @apply bg-gradient-to-r from-accent to-accent-glow text-accent-foreground font-semibold px-8 py-4 rounded-full relative overflow-hidden;
     @apply shadow-[0_0_30px_hsl(var(--accent-glow)_/_0.4)] transition-all duration-300;
     @apply hover:shadow-[0_0_50px_hsl(var(--accent-glow)_/_0.6)] hover:scale-105;
+    transform-style: preserve-3d;
   }
 
-  /* Cosmic cards */
+  /* Enhanced Cosmic cards with glass morphism and 3D effects */
   .card-cosmic {
-    @apply bg-card/50 backdrop-blur-lg border border-border/30 rounded-2xl p-6;
+    @apply backdrop-blur-lg border border-border/30 rounded-2xl p-6 relative overflow-hidden;
     @apply shadow-[0_25px_50px_-12px_hsl(var(--primary)_/_0.25)];
     background: linear-gradient(135deg, 
       hsl(var(--card) / 0.1), 
       hsl(var(--primary) / 0.05)
     );
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
 
-  /* Starfield animation */
+  .card-cosmic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary-glow) / 0.5), transparent);
+  }
+
+  .card-cosmic::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, hsl(var(--primary-glow) / 0.03) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .card-cosmic:hover::after {
+    opacity: 1;
+  }
+
+  /* Enhanced starfield animation with depth */
   .starfield {
     position: fixed;
     top: 0;
@@ -135,38 +196,138 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .starfield::before,
+  .starfield::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     background-image: 
       radial-gradient(2px 2px at 20px 30px, hsl(var(--primary-glow)), transparent),
       radial-gradient(2px 2px at 40px 70px, hsl(var(--secondary-glow)), transparent),
       radial-gradient(1px 1px at 90px 40px, hsl(var(--accent-glow)), transparent),
-      radial-gradient(1px 1px at 130px 80px, hsl(var(--primary)), transparent);
+      radial-gradient(1px 1px at 130px 80px, hsl(var(--primary)), transparent),
+      radial-gradient(2px 2px at 160px 30px, hsl(var(--primary-glow)), transparent);
     background-repeat: repeat;
-    background-size: 250px 300px;
+    background-size: 200px 100px;
     animation: sparkle 20s linear infinite;
+    opacity: 0.8;
+  }
+
+  .starfield::after {
+    background-size: 400px 200px;
+    animation: sparkle 30s linear reverse infinite;
+    opacity: 0.6;
   }
 
   @keyframes sparkle {
-    from { transform: translateY(0px) rotate(0deg); }
-    to { transform: translateY(-300px) rotate(360deg); }
+    from { transform: translateX(0) translateY(0); }
+    to { transform: translateX(-200px) translateY(-100px); }
   }
 
-  /* Glow text effects */
+  /* Advanced glow text effects */
   .text-cosmic-glow {
     @apply bg-gradient-to-r from-primary via-primary-glow to-secondary-glow bg-clip-text text-transparent;
     text-shadow: 0 0 30px hsl(var(--primary-glow) / 0.5);
+    filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.3));
   }
 
   .text-nebula-glow {
     @apply bg-gradient-to-r from-secondary via-accent to-accent-glow bg-clip-text text-transparent;
     text-shadow: 0 0 30px hsl(var(--secondary-glow) / 0.5);
+    filter: drop-shadow(0 0 8px hsl(var(--secondary) / 0.2));
   }
 
-  /* Scroll reveal animations */
+  /* 3D Transform GPU Acceleration */
+  .transform-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  /* Floating particles */
+  .floating-particle {
+    pointer-events: none;
+    will-change: transform, opacity;
+    border-radius: 50%;
+    background: radial-gradient(circle, currentColor 0%, transparent 70%);
+  }
+
+  /* Enhanced hover effects */
+  .hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px) rotateX(5deg);
+    box-shadow: 
+      0 20px 40px hsl(var(--primary) / 0.15),
+      0 8px 16px hsl(var(--secondary) / 0.1);
+  }
+
+  /* Magnetic button effect base */
+  .magnetic {
+    transition: transform 0.2s ease-out;
+    cursor: pointer;
+  }
+
+  /* Advanced scroll reveal animations */
+  .reveal-element {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .reveal-element.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
   .reveal-up {
     @apply transform translate-y-8 opacity-0 transition-all duration-700 ease-out;
   }
 
   .reveal-up.revealed {
     @apply translate-y-0 opacity-100;
+  }
+
+  /* Stagger animation delays */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+
+  /* Performance optimizations */
+  .animate-element {
+    will-change: transform, opacity;
+  }
+
+  /* Timeline specific animations */
+  .timeline-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .timeline-card:hover {
+    transform: translateY(-5px) rotateY(5deg);
+  }
+
+  /* Feature card 3D hover */
+  .feature-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+
+  .feature-card:hover {
+    transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
   }
 }
